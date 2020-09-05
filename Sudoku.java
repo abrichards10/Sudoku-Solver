@@ -8,12 +8,12 @@
 
 import java.util.Scanner;
 
-public class Sudoku {
+public class Sudoku2 {
     Scanner input = new Scanner(System.in);
     private final int[][] arr;
     private final int end;
 
-    public Sudoku() {
+    public Sudoku2() {
         arr = new int[9][9];
         end = arr.length;
         enterBoard();
@@ -35,7 +35,7 @@ public class Sudoku {
             }
         }
         printBoard(); // prints before
-        solveBoard();
+        solveBoard(arr, end);
         printBoard(); // prints after
     }
 
@@ -86,33 +86,68 @@ public class Sudoku {
     }
 
     private boolean checkSubGrid(int userNum, int currRow, int currCol) {
-        int r = ( (currRow/3)*3);
-        System.out.println(r);
+        int sqrt = (int)Math.sqrt(arr.length);
+        // the rows and columns of the subgrid are checked
+        int row_subgrid = currRow - currRow % sqrt; //
+        int col_subgrid = currCol - currCol % sqrt;
 
-        int c = ( (currCol/3)*3);
-        System.out.println(c);
 
-        int rowCount=1, colCount=1;
-
-        for (; rowCount<3; r++){
-            for (; colCount<3; c++) {
-                System.out.println("ahahah");
-                if (arr[r][c] == userNum && arr[r][c]!=0) {
-                    System.out.println("uh oh");
-                    return false;
+        for(int r = row_subgrid; r < row_subgrid + sqrt; r++){ // we start going by 3's --> the row starts at the first subgrid
+            for(int c = col_subgrid; c < col_subgrid + sqrt; c++){ // same with the columns
+                if(arr[r][c] == userNum){ // if anything is found in the rows or columns of the subgrid
+                    return false; // we cannot place the number there
                 }
-                colCount++;
             }
-            colCount=1;
-            rowCount++;
         }
         return true;
     }
 
     /* solves sudoku board recursively */
-    private void solveBoard() {
+    public boolean solveBoard(int[][]board, int N) {
+        int row = -1;
+        int col = -1;
+        // checks if theres a 0
+        boolean empty = true;
 
-    }
+        // it's not empty if there is a 0 --> therefore we can add 
+        for(int r = 0; r < N; r++){
+            for(int c = 0; c < N; c++) {
+                if (board[r][c] == 0) {
+                    row = r;
+                    col = c;
+
+                    empty = false;
+                    break;
+                }
+            }
+            // if there is not a zero, just continue
+            if(!empty){
+                break;
+            }
+        }
+        
+        if(empty){
+            return true;
+        }
+
+        // RECURSIVELY CALLED
+        // If the placement is valid, we add the number to the cell
+        // Tf the placement is valid and it is possible to solve, return true
+        for(int num = 1; num <= N; num++){
+            if(isValid(num, row, col)){
+                board[row][col] = num;
+                if(solveBoard(board, N)){
+                    return true;
+                }
+            }
+            // otherwise, it stays empty
+            else{
+                board[row][col] = 0;
+            }
+        }
+        return false;
+
+}
 
     /* displays sudoku board */
     public void printBoard() {
@@ -137,7 +172,7 @@ public class Sudoku {
     }
 
     public static void main(String[] args) {
-        Sudoku game = new Sudoku();
+        Sudoku2 game = new Sudoku2();
     }
 
 }
