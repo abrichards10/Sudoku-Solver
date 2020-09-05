@@ -8,12 +8,12 @@
 
 import java.util.Scanner;
 
-public class Sudoku2 {
+public class Sudoku {
     Scanner input = new Scanner(System.in);
     private final int[][] arr;
     private final int end;
 
-    public Sudoku2() {
+    public Sudoku() {
         arr = new int[9][9];
         end = arr.length;
         enterBoard();
@@ -170,7 +170,7 @@ public class Sudoku2 {
     }
 
     public static void main(String[] args) {
-        Sudoku2 game = new Sudoku2();
+        Sudoku game = new Sudoku();
     }
 
 }
