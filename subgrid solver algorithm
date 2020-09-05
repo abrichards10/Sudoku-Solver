@@ -1,0 +1,15 @@
+// The sqrt in this instance is going to be represented by the
+        // sqrt of the length of the board
+        int sqrt = (int)Math.sqrt(board.length);
+        // the rows and columns of the subgrid are checked
+        int row_subgrid = row - row % sqrt; //
+        int col_subgrid = col - col % sqrt;
+
+
+        for(int r = row_subgrid; r < row_subgrid + sqrt; r++){ // we start going by 3's --> the row starts at the first subgrid
+            for(int c = col_subgrid; c < col_subgrid + sqrt; c++){ // same with the columns
+                if(board[r][c] == num){ // if anything is found in the rows or columns of the subgrid
+                    return false; // we cannot place the number there
+                }
+            }
+        }
