@@ -16,27 +16,24 @@ public class Sudoku {
     public Sudoku() {
         arr = new int[9][9];
         end = arr.length;
-        enterBoard();
     }
 
     /* allows users to input values sudoku board */
-    private void enterBoard() {
+    public void enterBoard() {
         int num;
 
         for (int row=0; row<end; row++) {
             for (int column=0; column<end; column++) {
                 do {
-                    printBoard();
+                    /* runs at least once */
                     System.out.print("Please input a num (0 for blank or 1-9)\nfor ROW " + row + " COLUMN " + column + " : ");
                     num = input.nextInt();
 
+                    /* keeps going until number is valid, loop finishes when 81 cells are filled*/
                 } while ( num!=0 && !isValid(num, row, column) );
                 arr[row][column] = num;
             }
         }
-        printBoard(); // prints before
-        solveBoard();
-        printBoard(); // prints after
     }
 
     /* checks if the input is a valid number and valid for the cell. */
@@ -44,19 +41,15 @@ public class Sudoku {
 
         /* if the user input is not 0-9, return invalid */
         if(userNum<1 || userNum>9) {
-            System.out.println("ONLY INPUT NUMBERS 0-9");
             return false;
         }
         if (!checkColumns(userNum, currRow)) {
-            System.out.println("CONFLICT IN COLUMNS");
             return false;
         }
         if (!checkRows(userNum, currCol)) {
-            System.out.println("CONFLICT IN ROWS");
             return false;
         }
         if (!checkSubGrid(userNum, currRow, currCol)) {
-            System.out.println("CONFLICT IN SUBGRID");
             return false;
         }
         /* inputs valid num in cell and increments row/column respectively */
@@ -86,23 +79,19 @@ public class Sudoku {
     }
 
     private boolean checkSubGrid(int userNum, int currRow, int currCol) {
-        int r = ( (currRow/3)*3);
-        System.out.println(r);
-
-        int c = ( (currCol/3)*3);
-        System.out.println(c);
-
+        /* keeps track of subgrid row count, should stop when rowCount and colCount equals 3 */
         int rowCount=1, colCount=1;
 
-        for (; rowCount<3; r++){
-            for (; colCount<3; c++) {
-                System.out.println("ahahah");
+        for (int r = currRow-(currRow%3); rowCount<3; r++){
+            for (int c = currCol-(currCol%3); colCount<3; c++) {
+                /* loops through subgrid columns and rows to check for conflict */
                 if (arr[r][c] == userNum && arr[r][c]!=0) {
-                    System.out.println("uh oh");
                     return false;
                 }
+                /* updates one out of three column loops for one row */
                 colCount++;
             }
+            /* resets column to one and increments row by one */
             colCount=1;
             rowCount++;
         }
@@ -110,7 +99,7 @@ public class Sudoku {
     }
 
     /* solves sudoku board recursively */
-    private void solveBoard() {
+    public void solveBoard() {
 
     }
 
@@ -138,6 +127,10 @@ public class Sudoku {
 
     public static void main(String[] args) {
         Sudoku game = new Sudoku();
+        game.enterBoard(); // starts user input
+        game.printBoard(); // prints partially filled board
+        game.solveBoard(); // solves board fully
+        game.printBoard(); // prints solved board
     }
 
 }
